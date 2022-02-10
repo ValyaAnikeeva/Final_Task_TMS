@@ -6,9 +6,7 @@ from tools.db_steps import db_get_test_user_id
 
 
 class ChangeUserPage(BasePage):
-    id = db_get_test_user_id()
-    # есть вопрос по этой ссылке с запросом id из базы данных. Необходимо ли так делать?
-    URL = ('http://localhost:8000/admin/auth/user/{id}/change/')
+    URL = ('http://localhost:8000/admin/auth/user/change/')
 
     def __init__(self, browser):
         super().__init__(browser, self.URL)
