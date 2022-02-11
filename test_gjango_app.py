@@ -3,11 +3,12 @@ from pages.admin_page import AdminPage
 from pages.login_page import LoginPage
 from tools import db_steps
 from constants import NEW_USER_USERNAME
+from tools.db_steps import DataBase
 
 """Страница с тестами"""
 
 
-def test_add_new_user(browser):
+def test_add_new_user(browser, postgres_connections):
     """
     1.	Открыть приложение
     2.	Войти в админку
@@ -27,7 +28,9 @@ def test_add_new_user(browser):
     log_out_page = admin_page.log_out()
 
     """4.	Проверить что пользователь создан в дб"""
-    assert 'test_user' in db_steps.db_users()
+    postgres = DataBase(postgres_connections)
+    assert 'test_user' in postgres.db_users()
+
 
 def test_open_app_by_new_user(browser):
     """
@@ -41,6 +44,3 @@ def test_open_app_by_new_user(browser):
     welcome_user_element = admin_page.find_welcome_user_element()
 
     assert welcome_user_element.text == NEW_USER_USERNAME.upper()
-
-
-
