@@ -1,4 +1,5 @@
 from datetime import datetime
+import psycopg2
 import pytest
 from selenium import webdriver
 
@@ -15,3 +16,11 @@ def browser():
     driver.implicitly_wait(5)
     yield driver
     driver.quit()
+
+
+@pytest.fixture(scope='session')
+def postgres_connections():
+    db = psycopg2.connect(dbname='postgres', user='postgres',
+                          password='postgres', host='localhost')
+    yield db
+    db.close()
