@@ -1,14 +1,16 @@
 from pages.main_page import MainPage
 from pages.admin_page import AdminPage
-from constants import NEW_USER_USERNAME
+from constants import NEW_USER_USERNAME, NEW_USER_PASSWORD
 from tools.db_steps import DataBase
+import pytest
 import allure
 
 """Страница с тестами"""
 
 
 @allure.story('Add new user')
-def test_add_new_user(browser, postgres_connections):
+@pytest.mark.parametrize('login, password', [(NEW_USER_USERNAME, NEW_USER_PASSWORD)])
+def test_add_new_user(browser, postgres_connections, login, password):
     """
     1.	Открыть приложение
     2.	Войти в админку
@@ -22,7 +24,7 @@ def test_add_new_user(browser, postgres_connections):
         admin_page = login_page.input_admin_credentials()
     with allure.step('Add new user'):
         add_user = admin_page.new_user()
-        new_user = add_user.add_new_user()
+        new_user = add_user.add_new_user(login, password)
         save_new_user = new_user.add_permissions_for_user()
 
     """5.	Выйти из приложения"""
@@ -34,7 +36,7 @@ def test_add_new_user(browser, postgres_connections):
     """4.	Проверить что пользователь создан в дб"""
     with allure.step('Check new user in database'):
         postgres = DataBase(postgres_connections)
-        assert 'test_user' in postgres.db_users()
+        assert NEW_USER_USERNAME in postgres.db_users()
 
 
 @allure.story('Open app by new user')
