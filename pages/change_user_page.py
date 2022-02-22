@@ -1,6 +1,5 @@
 from pages.base_page import BasePage
 from pages.change_user_page_locators import ChangeUserPageLocators
-from tools.db_steps import db_get_test_user_id
 
 """Страница изменения данных пользователя"""
 
